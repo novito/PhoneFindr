@@ -15,7 +15,7 @@ class Parser
     anchors = []
 
     while current_page <= num_pages 
-      anchors << html.css('.makers li a').map { |anchor| anchor['href'] }
+      html.css('.makers li a').each { |anchor| anchors << anchor['href'] }
 
       current_page += 1
       if current_page <= num_pages
@@ -25,7 +25,7 @@ class Parser
       end
     end
 
-    return anchors.flatten 
+    return anchors
   end
 
   def find_n_pages(base_page)
