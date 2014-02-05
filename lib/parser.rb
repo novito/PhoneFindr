@@ -15,7 +15,7 @@ class Parser
     anchors = []
 
     while current_page <= num_pages 
-      html.css('.makers li a').each { |anchor| anchors << anchor['href'] }
+      html.css('.makers li a').each { |anchor| anchors << build_absolute_url(url, anchor['href']) }
 
       current_page += 1
       if current_page <= num_pages
@@ -27,9 +27,19 @@ class Parser
 
     return anchors
   end
+  
+  private
 
   def find_n_pages(base_page)
     return base_page.css('.nav-pages a').size
+  end
+
+  def build_absolute_url(main_url, product_url)
+    uri = URI.parse(product_url)
+    unless uri.host
+      product_url = URI.join( main_url, product_url ).to_s
+    end
+    return product_url
   end
 
 end

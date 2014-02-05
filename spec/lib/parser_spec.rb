@@ -20,7 +20,7 @@ describe "#parse_cat" do
 
   context "when parsing Nokia" do
     it "should return an Array with Nokia phones urls" do
-      known_nokia_url = 'nokia_lumia_1520-5760.php' 
+      known_nokia_url = 'http://www.gsmarena.com/nokia_2700_classic-2657.php' 
       VCR.use_cassette "nokia" do
         nokia_urls = @parser.parse_cat('http://www.gsmarena.com/nokia-phones-f-1-2-p1.php')
         expect(nokia_urls).to include(known_nokia_url)
