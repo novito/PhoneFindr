@@ -11,7 +11,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140205162351) do
+ActiveRecord::Schema.define(version: 20140205164618) do
+
+  create_table "category_urls", force: true do |t|
+    t.integer  "source_id"
+    t.datetime "last_parsed"
+    t.string   "url"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "device_categories", force: true do |t|
     t.string   "name",       null: false
