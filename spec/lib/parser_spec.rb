@@ -17,6 +17,10 @@ describe "#parse_cat" do
     end
   end
 
+  it "should raise an Exception if the URL is not valid" do
+    expect { @parser.parse_cat('adsadasdas') }.to raise_error(Errno::ENOENT)
+  end
+
   context "when parsing Nokia" do
     it "should return an Array with Nokia phones urls" do
       known_nokia_url = 'http://www.gsmarena.com/nokia_2700_classic-2657.php' 
@@ -45,7 +49,18 @@ describe "#parse_page" do
     end
   end
 
-  it "returns an empty Hash if the url is an empty string" do
-    expect(@parser.parse_page('')).to be_empty
+  it "should return general information about the phone" do
+    VCR.use_cassette "nokia specific page" do
+      results = @parser.parse_page(@url)
+      expect(results).to have_key('general')
+    end
+  end
+  
+  it "should raise an Exception if the URL is not valid" do
+    expect { @parser.parse_page('adsadasdas') }.to raise_error(Errno::ENOENT)
+  end
+
+  it "should raise an Exception if the URL is empty" do
+    expect { @parser.parse_page('') }.to raise_error(Errno::ENOENT)
   end
 end

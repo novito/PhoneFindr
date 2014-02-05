@@ -30,10 +30,15 @@ class Parser
 
   def parse_page(url)
     results = {}
+    html = Nokogiri::HTML(open(url)) 
+    results[:general] = get_phone_general_info(html)
     return results
   end
   
   private
+
+  def get_phone_general_info(html)
+  end
 
   def find_n_pages(base_page)
     return base_page.css('.nav-pages a').size
