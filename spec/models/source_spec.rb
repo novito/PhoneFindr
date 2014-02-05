@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Sources do
+describe Source do
   it "is invalid without a name" do
     expect(FactoryGirl.build(:source, name:nil)).to_not be_valid
   end
