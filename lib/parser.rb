@@ -3,6 +3,7 @@ require 'open-uri'
 class Parser
 
   def initialize
+    @general_keys = ['2G Network', '3G Network', '4G Network', 'SIM', 'Announced', 'Status']
   end
 
   def parse_cat(url)
@@ -31,13 +32,33 @@ class Parser
   def parse_page(url)
     results = {}
     html = Nokogiri::HTML(open(url)) 
-    results[:general] = get_phone_general_info(html)
+    results = get_specs(html)
     return results
   end
   
   private
 
-  def get_phone_general_info(html)
+  def get_specs(html)
+    results = {}
+    tables = html.css('#specs-list table')
+    tables.each do |table|
+      category_key = table.css('th').text
+      results[category_key] = []
+      rows = table.css('tr')
+
+      rows.each do |row|
+        spec_key = row.css('.ttl').text
+        spec_content = row.css('.nfo').text
+        results[category_key] << {spec_key => clean_html(spec_content)}
+      end
+    end
+
+    return results
+  end
+
+  def clean_html(str)
+    str.gsub!(/\r\n?/, "");
+    return str
   end
 
   def find_n_pages(base_page)
