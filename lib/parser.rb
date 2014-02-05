@@ -27,6 +27,11 @@ class Parser
 
     return anchors
   end
+
+  def parse_page(url)
+    results = {}
+    return results
+  end
   
   private
 
