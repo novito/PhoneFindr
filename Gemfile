@@ -50,7 +50,11 @@ group :development, :test do
   gem "database_cleaner", "~> 1.2.0"
   gem "webmock", "~> 1.17.2"
   gem "vcr", "~> 2.8.0"
+  gem "capybara", "~> 2.2.1"
 end
 
+
 gem "nokogiri", "~> 1.6.1"
+gem "devise", "~> 3.2.2"
+gem "rails_admin", "~> 0.6.1"
 

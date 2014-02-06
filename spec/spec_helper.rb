@@ -63,4 +63,7 @@ RSpec.configure do |config|
   config.after(:each) do
     DatabaseCleaner.clean
   end
+
+  # Include session helpers
+  config.include Features::SessionHelpers, type: :feature
 end
