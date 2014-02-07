@@ -4,6 +4,6 @@ FactoryGirl.define do
   factory :category_url do
     source
     last_parsed "2014-02-05 08:46:18"
-    url "http://www.gsmarena.com/nokia_lumia_1520-5760.php"
+    url "http://www.gsmarena.com/nokia-phones-1.php"
   end
 end

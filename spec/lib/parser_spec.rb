@@ -50,7 +50,7 @@ describe "#parse_page" do
 
   it "should return general information about the phone" do
     VCR.use_cassette "nokia specific page" do
-      #expect(@parser.parse_page(@url)).to have_key('general')
+      expect(@parser.parse_page(@url)).to have_key('General')
     end
   end
   

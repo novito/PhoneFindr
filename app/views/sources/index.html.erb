@@ -1,0 +1,22 @@
+<table>
+
+  <tr>
+    <th>Name</th>
+    <th>Url</th>
+  </tr>
+
+<% @sources.each do |source| %>
+  <tr>
+    <td><%= source.name %></td>
+    <td><%= source.url %></td>
+    <td>
+      <%= form_for [:parse, source], method: :post do |f| %>
+        <%= f.submit 'Parse this source' %>
+      <% end %>
+    </td>
+  </tr>
+
+
+<% end %>
+
+</table>

@@ -33,6 +33,7 @@ class Parser
     results = {}
     html = Nokogiri::HTML(open(url)) 
     results = get_specs(html)
+
     return results
   end
   
@@ -58,6 +59,7 @@ class Parser
 
   def clean_html(str)
     str.gsub!(/\r\n?/, "");
+    str = ActionView::Base.full_sanitizer.sanitize(str)
     return str
   end
 

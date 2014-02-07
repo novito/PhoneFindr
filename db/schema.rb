@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140205211905) do
+ActiveRecord::Schema.define(version: 20140206053829) do
 
   create_table "category_urls", force: true do |t|
     t.integer  "source_id"
@@ -23,6 +23,22 @@ ActiveRecord::Schema.define(version: 20140205211905) do
 
   create_table "device_categories", force: true do |t|
     t.string   "name",       null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "device_pages", force: true do |t|
+    t.string   "url"
+    t.datetime "last_parsed"
+    t.integer  "category_url_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "device_specifications", force: true do |t|
+    t.text     "name"
+    t.text     "value"
+    t.integer  "device_page"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
