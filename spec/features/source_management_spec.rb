@@ -1,48 +1,46 @@
 require "spec_helper"
 
-feature "Source management" do
-  context "as a logged in admin" do
+feature 'Admin accesses sources management' do
+  scenario 'fails to access because he doesnt have admin flag' do
+      source = create(:source, { :name => 'GSMArena', :url => 'http://www.gsmarena.com' }) 
+
+      user = create(:user)
+      sign_in(user)
+
+      visit "/sources"
+
+      expect(page).to have_text('Hi there')
+  end
+
+  context 'being an admin' do
+    let(:user) { create(:user, :admin) }
 
     before(:each) do
-      @user = create(:user, :admin)
-      sign_in(@user)
+      create(:source, { :name => 'GSMArena', :url => 'http://www.gsmarena.com' }) 
     end
 
-    scenario "see list of all sources" do
-      source = create(:source, { :name => 'GSMArena', :url => 'http://www.gsmarena.com' }) 
+    scenario 'fails to access because he isnt signed in' do
+      visit "/sources"
+
+      expect(page).to have_text('Sign in')
+    end
+
+    scenario 'sees list of all sources' do
+      sign_in(user)
+
       visit "/sources"
 
       expect(page).to have_text("GSMArena")
     end
 
-    scenario "parse a source" do
-      source = create(:source, { :name => 'GSMArena', :url => 'http://www.gsmarena.com' }) 
+    scenario 'parses an existing source' do
+      sign_in(user)
+
       visit "/sources"
       click_button 'Parse this source'
 
-      expect(page).to have_text("The source is being parsed. Check later")
+      expect(page).to have_text('The source is being parsed. Check later')
     end
   end
 
-  context "as a non admin user who is not logged in" do
-    scenario "should be redirected to the sign in page" do
-      user = create(:user)
-      source = create(:source, { :name => 'GSMArena', :url => 'http://www.gsmarena.com' }) 
-      visit "/sources"
-
-      expect(page).to have_text("Sign in")
-    end
-  end
-
-  context "as a non admin user who is logged in" do
-    scenario "should be redirected to the home page" do
-      user = create(:user)
-      sign_in(user)
-
-      source = create(:source, { :name => 'GSMArena', :url => 'http://www.gsmarena.com' }) 
-      visit "/sources"
-
-      expect(page).to have_text("Hi there")
-    end
-  end
 end
