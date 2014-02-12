@@ -55,8 +55,8 @@ class GsmArenaProductParser < ProductParser
   end
 
   def get_release_date(raw_status)
-    release_date = raw_status.scan(/Released\s+(\d{4},\s*[A-Z][a-z]+)/)
-    return release_date.any? ? Date.parse(release_date.first.first) : nil
+    release_date = raw_status[/Released\s+(\d{4},\s*[A-Z][a-z]+)/]
+    return release_date.nil? ? nil : Date.parse(release_date)
   end
 
   def get_status_availability(raw_status)
