@@ -48,11 +48,23 @@ class GsmArenaProductParser < ProductParser
   end
 
   def get_status_spec(raw_status)
-    case raw_status.downcase!
+    status = {}
+    status[:available] = get_status_availability(raw_status)
+    status[:release_date] = get_release_date(raw_status)
+    return status
+  end
+
+  def get_release_date(raw_status)
+    release_date = raw_status.scan(/Released\s+(\d{4},\s*[A-Z][a-z]+)/)
+    return release_date.any? ? Date.parse(release_date.first.first) : nil
+  end
+
+  def get_status_availability(raw_status)
+    case raw_status.downcase
     when /available/
-      {:available => true}
+      true
     when /coming soon/
-      {:available => false}
+      false
     else
       nil
     end

@@ -43,6 +43,13 @@ describe GsmArenaProductParser do
           expect(specs[:general][:status][:available]).to be_true
         end
       end
+      it 'returns a release date' do
+        VCR.use_cassette 'gsm arena available phone' do
+          available_phone = 'http://www.gsmarena.com/nokia_lumia_1520-5760.php'
+          specs = parser.parse(available_phone)
+          expect(specs[:general][:status][:release_date]).to eql(Date.new(2013, 11, 1))
+        end
+      end
     end
 
     context "A phone that is not available, but is coming soon" do
