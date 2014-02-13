@@ -35,34 +35,71 @@ describe GsmArenaProductParser do
       expect { parser.parse('') }.to raise_error(Errno::ENOENT)
     end
 
-    context "A phone that is available" do
-      it 'returns an available status' do
-        VCR.use_cassette 'gsm arena available phone' do
-          available_phone = 'http://www.gsmarena.com/nokia_lumia_1520-5760.php'
-          specs = parser.parse(available_phone)
-          expect(specs[:general][:status][:available]).to be_true
+    describe 'general specs of the phone' do
+      context "A phone that is available" do
+        it 'returns an available status' do
+          VCR.use_cassette 'gsm arena available phone' do
+            available_phone = 'http://www.gsmarena.com/nokia_lumia_1520-5760.php'
+            specs = parser.parse(available_phone)
+            expect(specs[:general][:status][:available]).to be_true
+          end
+        end
+
+        it 'returns an announced date' do
+          VCR.use_cassette 'gsm arena available phone' do
+            available_phone = 'http://www.gsmarena.com/nokia_lumia_1520-5760.php'
+            specs = parser.parse(available_phone)
+            expect(specs[:general][:announced]).to eql(Date.new(2013, 10, 1))
+          end
+        end
+
+        it 'returns a release date' do
+          VCR.use_cassette 'gsm arena available phone' do
+            available_phone = 'http://www.gsmarena.com/nokia_lumia_1520-5760.php'
+            specs = parser.parse(available_phone)
+            expect(specs[:general][:status][:release_date]).to eql(Date.new(2013, 11, 1))
+          end
         end
       end
-      it 'returns a release date' do
-        VCR.use_cassette 'gsm arena available phone' do
-          available_phone = 'http://www.gsmarena.com/nokia_lumia_1520-5760.php'
-          specs = parser.parse(available_phone)
-          expect(specs[:general][:status][:release_date]).to eql(Date.new(2013, 11, 1))
+
+      context "A phone that is not available, but is coming soon" do
+        it 'returns an unavailable status' do
+          VCR.use_cassette 'gsm arena coming soon phone' do
+            coming_soon_phone = 'http://www.gsmarena.com/sony_xperia_e1_dual-5967.php'
+            specs = parser.parse(coming_soon_phone)
+            expect(specs[:general][:status][:available]).to be_false
+          end
+        end
+
+        it 'returns an announced date' do
+          VCR.use_cassette 'gsm arena coming soon phone' do
+            coming_soon_phone = 'http://www.gsmarena.com/sony_xperia_e1_dual-5967.php'
+            specs = parser.parse(coming_soon_phone)
+            expect(specs[:general][:announced]).to eql(Date.new(2014, 1, 1))
+          end
         end
       end
     end
 
-    context "A phone that is not available, but is coming soon" do
-      it 'returns an unavailable status' do
+    describe 'display specs' do
+      it 'returns resolution of the screen' do
         VCR.use_cassette 'gsm arena coming soon phone' do
           coming_soon_phone = 'http://www.gsmarena.com/sony_xperia_e1_dual-5967.php'
           specs = parser.parse(coming_soon_phone)
-          expect(specs[:general][:status][:available]).to be_false
+
+          expect(specs[:display][:size][:width]).to eql(480)
+          expect(specs[:display][:size][:height]).to eql(800)
+        end
+      end
+      it 'returns diagonal of the screen' do
+        VCR.use_cassette 'gsm arena coming soon phone' do
+          coming_soon_phone = 'http://www.gsmarena.com/sony_xperia_e1_dual-5967.php'
+          specs = parser.parse(coming_soon_phone)
+
+          expect(specs[:display][:size][:diagonal]).to eql(4.0)
         end
       end
     end
 
-  end
-
-
+  end #end parse method
 end
