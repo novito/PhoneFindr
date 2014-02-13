@@ -38,6 +38,10 @@ class GsmArenaProductParser < ProductParser
     return specs
   end
 
+  ##############################################################################
+  ##################### DISPLAY SPECIFICATIONS #################################
+  ##############################################################################
+
   def get_display_spec(raw_display_spec)
     display_spec = {}
 
@@ -70,6 +74,10 @@ class GsmArenaProductParser < ProductParser
       {width: nil, height: nil} : {width: display_size_resolution[1].to_i, height: display_size_resolution[2].to_i}
   end
 
+  ##############################################################################
+  ##################### GENERAL SPECIFICATIONS #################################
+  ##############################################################################
+
   def get_general_spec(raw_general_spec)
     general_spec = {}
 
@@ -80,6 +88,10 @@ class GsmArenaProductParser < ProductParser
     general_spec[:status] = 
       raw_general_spec.detect { |hash| hash.has_key?('Status') } ? 
       get_status_spec(raw_general_spec.detect { |hash| hash.has_key?('Status') }['Status']) : nil
+
+    general_spec[:sim] =
+      raw_general_spec.detect { |hash| hash.has_key?('SIM') } ?
+      get_sim_spec(raw_general_spec.detect { |hash| hash.has_key?('SIM') }['SIM']) : nil
 
     return general_spec
   end
@@ -100,7 +112,6 @@ class GsmArenaProductParser < ProductParser
     release_date = raw_status[/Released\s+(\d{4},\s*[A-Z][a-z]+)/]
     return release_date.nil? ? nil : Date.parse(release_date)
   end
-
   
   def get_status_availability(raw_status)
     case raw_status.downcase
@@ -108,9 +119,23 @@ class GsmArenaProductParser < ProductParser
       true
     when /coming soon/
       false
+    when /discontinued/
+      false
     else
       nil
     end
+  end
+
+  def get_sim_spec(raw_sim)
+    raw_sim.downcase!
+    sim = {}
+
+    sim[:micro_sim] = raw_sim.include?('micro-sim')
+    sim[:mini_sim] = raw_sim.include?('mini-sim')
+    sim[:dual_sim] = raw_sim.include?('dual-sim') || raw_sim.include?('dual sim')
+    sim[:nano_sim] = raw_sim.include?('nano-sim')
+
+    return sim
   end
 
 end
