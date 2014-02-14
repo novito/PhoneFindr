@@ -217,7 +217,7 @@ describe GsmArenaProductParser do
             multiple_memory_phone = 'http://www.gsmarena.com/motorola_moto_g_dual_sim-5978.php'
             specs = parser.parse(multiple_memory_phone)
 
-            expect(specs[:memory][:internal][:storage]).to match_array([8,16])
+            expect(specs[:memory][:internal][:storage]).to match_array([16,8])
             expect(specs[:memory][:internal][:unit]).to eq('GB')
           end
         end

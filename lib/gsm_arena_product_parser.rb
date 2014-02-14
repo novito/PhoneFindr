@@ -55,8 +55,12 @@ class GsmArenaProductParser < ProductParser
   end
 
   def get_memory_internal_spec(raw_internal_spec)
-    #@TODO
-    return nil
+    # Remove after comma (avoid getting RAM memory)
+    internal_storage = raw_internal_spec.split(',')[0]
+    internal_storage = internal_storage.scan(/(\d+)[\/ ]/)
+
+    values = internal_storage.empty? ? nil : {storage: internal_storage.map { |el| el[0].to_i }, unit: 'GB'}
+    return values
   end
 
   ##############################################################################
