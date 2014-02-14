@@ -34,9 +34,10 @@ describe GsmArenaProductParser do
     it 'raises an Exception if the URL is empty' do
       expect { parser.parse('') }.to raise_error(Errno::ENOENT)
     end
-    
+
+################################################## 
 ######## GENERAL SPECS ###########################
-    #
+################################################## 
     describe 'general specs of the phone' do
       context "A phone that is available" do
         it 'returns an available status' do
@@ -152,7 +153,10 @@ describe GsmArenaProductParser do
 
     end
 
+################################################## 
 ######## DISPLAY SPECS ###########################
+################################################## 
+
     describe 'display specs' do
       it 'returns resolution of the screen' do
         VCR.use_cassette 'gsm arena coming soon phone' do
@@ -174,6 +178,53 @@ describe GsmArenaProductParser do
       end
     end
 
+################################################## 
+######## FEATURES SPECS ###########################
+################################################## 
     
+    describe 'features specs' do
+      context 'a phone that has an operating system' do
+        it 'returns operating system of the phone' do
+          VCR.use_cassette 'gsm arena windows phone' do
+            windows_phone = 'http://www.gsmarena.com/nokia_lumia_2520-5702.php'
+            specs = parser.parse(windows_phone)
+
+            expect(specs[:features][:os]).to eql('Microsoft Windows RT')
+          end
+        end
+      end
+
+      context 'a phone that doesnt have an operating system' do
+        it 'returns a nil operating system' do
+          VCR.use_cassette 'gsm arena non operating system phone' do
+            non_os_phone = 'http://www.gsmarena.com/nokia_3110-23.php'
+            specs = parser.parse(non_os_phone)
+
+            expect(specs[:features][:os]).to be_nil
+          end
+        end
+      end
+    end
+
+################################################## 
+######## Memory SPECS ###########################
+################################################## 
+
+    describe 'memory specs' do
+      context 'a phone with multiple memory' do
+        it 'returns multiple memory storage numbers' do
+          VCR.use_cassette 'gsm arena phone multiple memory' do
+            multiple_memory_phone = 'http://www.gsmarena.com/motorola_moto_g_dual_sim-5978.php'
+            specs = parser.parse(multiple_memory_phone)
+
+            expect(specs[:memory][:internal][:storage]).to match_array([16,8])
+            expect(specs[:memory][:internal][:unit]).to eq('GB')
+          end
+        end
+      end
+    end
+
   end #end parse method
 end
+
+
