@@ -34,8 +34,47 @@ class GsmArenaProductParser < ProductParser
     specs = {}
     specs[:general] = raw_specs.has_key?('General') ? get_general_spec(raw_specs['General']) : nil
     specs[:display] = raw_specs.has_key?('Display') ? get_display_spec(raw_specs['Display']) : nil
+    specs[:features] = raw_specs.has_key?('Features') ? get_features_spec(raw_specs['Features']) : nil
+    specs[:memory] = raw_specs.has_key?('Memory') ? get_memory_spec(raw_specs['Memory']) : nil
 
     return specs
+  end
+
+  ##############################################################################
+  ##################### MEMORY SPECIFICATIONS #################################
+  ##############################################################################
+  
+  def get_memory_spec(raw_memory_spec)
+    memory_spec = {}
+
+    memory_spec[:internal] = 
+      raw_memory_spec.detect { |hash| hash.has_key?('Internal') } ?
+      get_memory_internal_spec(raw_memory_spec.detect { |hash| hash.has_key?('Internal') }['Internal']) : nil
+
+    return memory_spec
+  end
+
+  def get_memory_internal_spec(raw_internal_spec)
+    #@TODO
+    return nil
+  end
+
+  ##############################################################################
+  ##################### FEATURES SPECIFICATIONS #################################
+  ##############################################################################
+
+  def get_features_spec(raw_features_spec)
+    features_spec = {}
+
+    features_spec[:os] = 
+      raw_features_spec.detect { |hash| hash.has_key?('OS') } ?
+      get_features_os_spec(raw_features_spec.detect { |hash| hash.has_key?('OS') }['OS']) : nil
+
+    return features_spec
+  end
+
+  def get_features_os_spec(raw_os)
+    return raw_os
   end
 
   ##############################################################################
