@@ -209,19 +209,91 @@ describe GsmArenaProductParser do
 ################################################## 
 ######## Memory SPECS ###########################
 ################################################## 
+  
+
+    describe 'battery specs' do
+      it 'returns the stand by and talk time in minutes' do
+        VCR.use_cassette 'gsm arena stand by in hours and talk time in hours & minutes' do
+            talk_time_minutes_phone = 'http://www.gsmarena.com/nokia_108_dual_sim-5703.php'
+            specs = parser.parse(talk_time_minutes_phone)
+
+            expect(specs[:battery][:stand_by]).to eq({duration: 600*60, units:'minutes', type:'up'})
+            expect(specs[:battery][:talk_time]).to eq({duration: 13*60 + 40, units:'minutes', type:'up'})
+        end
+      end
+
+      it 'returns the first stand by and talk time in minutes if there are many' do
+        VCR.use_cassette 'gsm arena many talk time and stand by phone' do
+          many_talk_time_phone = 'http://www.gsmarena.com/xolo_a500s_ips-5839.php'
+          specs = parser.parse(many_talk_time_phone)
+
+          expect(specs[:battery][:stand_by]).to eq({duration: 492*60, units:'minutes', type:'up'})
+          expect(specs[:battery][:talk_time]).to eq({duration: 10*60, units:'minutes', type:'up'})
+        end
+      end
+
+      it 'returns nil if there is no data for battery specs' do
+        VCR.use_cassette 'gsm arena no data for battery specs' do
+          no_battery_data_phone = 'http://www.gsmarena.com/acer_liquid_glow_e330-4589.php'
+          specs = parser.parse(no_battery_data_phone)
+
+          expect(specs[:battery][:stand_by]).to be_nil
+          expect(specs[:battery][:talk_time]).to be_nil
+        end
+      end
+    end
+
+################################################## 
+######## Memory SPECS ###########################
+################################################## 
 
     describe 'memory specs' do
+      context 'a phone with a single memory' do
+        it 'returns a single memory storage number' do
+          VCR.use_cassette 'gsm arena phone single memory' do
+            single_memory_phone = 'http://www.gsmarena.com/motorola_moto_g_dual_sim-5978.php'
+            specs = parser.parse(single_memory_phone)
+
+            expect(specs[:memory][:internal][0]).to eq({size:8, unit: 'GB'})
+          end
+        end
+      end
+
+      context 'a phone which just have RAM memory' do
+        it 'returns no internal memory' do
+          VCR.use_cassette 'gsm arena phone just RAM' do
+            just_ram_phone = 'http://www.gsmarena.com/nokia_108_dual_sim-5703.php'
+            specs = parser.parse(just_ram_phone)
+
+            expect(specs[:memory][:internal]).to be_nil
+          end
+
+        end
+      end
+
       context 'a phone with multiple memory' do
         it 'returns multiple memory storage numbers' do
           VCR.use_cassette 'gsm arena phone multiple memory' do
             multiple_memory_phone = 'http://www.gsmarena.com/motorola_moto_g_dual_sim-5978.php'
             specs = parser.parse(multiple_memory_phone)
 
-            expect(specs[:memory][:internal][:storage]).to match_array([16,8])
-            expect(specs[:memory][:internal][:unit]).to eq('GB')
+            expect(specs[:memory][:internal][0]).to eq({size:8, unit: 'GB'})
+            expect(specs[:memory][:internal][1]).to eq({size:16, unit: 'GB'})
+          end
+        end
+
+        # Cases like this: 16 GB (RM-940 only)/32 GB, 2 GB RAM
+        it 'returns multiple memory storage numbers, even if there is other text in between those' do
+          VCR.use_cassette 'gsm arena phone multiple memory dirty text' do
+            multiple_memory_phone = 'http://www.gsmarena.com/nokia_lumia_1520-5760.php'
+            specs = parser.parse(multiple_memory_phone)
+
+            expect(specs[:memory][:internal][0]).to eq({size:16, unit: 'GB'})
+            expect(specs[:memory][:internal][1]).to eq({size:32, unit: 'GB'})
           end
         end
       end
+
     end
 
   end #end parse method
