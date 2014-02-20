@@ -32,12 +32,36 @@ class GsmArenaProductParser < ProductParser
 
   def clean_raw_specs(raw_specs)
     specs = {}
+
     specs[:general] = raw_specs.has_key?('General') ? get_general_spec(raw_specs['General']) : nil
     specs[:display] = raw_specs.has_key?('Display') ? get_display_spec(raw_specs['Display']) : nil
     specs[:features] = raw_specs.has_key?('Features') ? get_features_spec(raw_specs['Features']) : nil
     specs[:memory] = raw_specs.has_key?('Memory') ? get_memory_spec(raw_specs['Memory']) : nil
+    specs[:battery] = raw_specs.has_key?('Battery') ? get_battery_spec(raw_specs['Battery']) : nil
 
     return specs
+  end
+  ##############################################################################
+  ##################### MEMORY SPECIFICATIONS #################################
+  ##############################################################################
+
+  def get_battery_spec(raw_battery_spec)
+    battery_spec = {}
+
+    battery_spec[:stand_by] = 
+      raw_battery_spec.detect { |hash| hash.has_key?('Stand-by') } ?
+      get_battery_time(raw_battery_spec.detect { |hash| hash.has_key?('Stand-by') }['Stand-by']) : nil
+
+    battery_spec[:talk_time] = 
+      raw_battery_spec.detect { |hash| hash.has_key?('Talk time') } ?
+      get_battery_time(raw_battery_spec.detect { |hash| hash.has_key?('Talk time') }['Talk time']) : nil
+
+    return battery_spec
+  end
+
+  def get_battery_time(raw_stand_by_spec)
+    m = /Up to (\d+) h(?: (\d+) min)?/.match(raw_stand_by_spec)
+    return m.nil? ? nil : {duration: m[1].to_i * 60 + m[2].to_i, units: 'minutes', type:'up'}
   end
 
   ##############################################################################
@@ -56,11 +80,18 @@ class GsmArenaProductParser < ProductParser
 
   def get_memory_internal_spec(raw_internal_spec)
     # Remove after comma (avoid getting RAM memory)
-    internal_storage = raw_internal_spec.split(',')[0]
-    internal_storage = internal_storage.scan(/(\d+)[\/ ]/)
+    splitted_memory = raw_internal_spec.split(',')
+    internal_storage_result = []
 
-    values = internal_storage.empty? ? nil : {storage: internal_storage.map { |el| el[0].to_i }, unit: 'GB'}
-    return values
+    unless splitted_memory[0].include?('RAM')
+      internal_storage = splitted_memory[0].scan(/(\d+)(?=(?:\/\d+)*\s*([MG]B))/)
+
+      internal_storage.each do |is|
+        internal_storage_result << {size: is[0].to_i, unit: is[1]}
+      end
+    end
+
+    return internal_storage_result.any? ? internal_storage_result : nil
   end
 
   ##############################################################################
