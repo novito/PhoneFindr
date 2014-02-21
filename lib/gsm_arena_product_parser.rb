@@ -22,8 +22,8 @@ class GsmArenaProductParser < ProductParser
 
       rows.each do |row|
         spec_key = row.css('.ttl').text
-        spec_content = row.css('.nfo').text
-        results[category_key] << {spec_key => clean_html(spec_content)}
+        spec_content = row.css('.nfo')
+        results[category_key] << {spec_key => {text: spec_content.text, html: spec_content}}
       end
     end
     
@@ -38,9 +38,32 @@ class GsmArenaProductParser < ProductParser
     specs[:features] = raw_specs.has_key?('Features') ? get_features_spec(raw_specs['Features']) : nil
     specs[:memory] = raw_specs.has_key?('Memory') ? get_memory_spec(raw_specs['Memory']) : nil
     specs[:battery] = raw_specs.has_key?('Battery') ? get_battery_spec(raw_specs['Battery']) : nil
+    specs[:price] = raw_specs.has_key?('Misc') ? get_price_spec(raw_specs['Misc']) : nil
 
     return specs
   end
+
+  ##############################################################################
+  ##################### PRICE SPECIFICATIONS #################################
+  ##############################################################################
+  
+  def get_price_spec(raw_price_spec)
+    raw_price_spec.detect { |hash| hash.has_key?('Price group') } ? 
+      find_price_in_html(raw_price_spec.detect { |hash| hash.has_key?('Price group') }['Price group'][:html]) : nil
+  end
+
+  def find_price_in_html(html)
+    img_child = html.children.detect { |chld| chld.name == 'img' }
+    unless img_child.nil?
+      if img_child.attributes.has_key?('title')
+        match_price = /About (\d+) EUR/.match(img_child.attributes['title'].value)
+        unless match_price.nil?
+          return { value: match_price[1].to_i, currency: 'EUR', type: 'about' }
+        end
+      end
+    end
+  end
+
   ##############################################################################
   ##################### MEMORY SPECIFICATIONS #################################
   ##############################################################################
@@ -50,11 +73,11 @@ class GsmArenaProductParser < ProductParser
 
     battery_spec[:stand_by] = 
       raw_battery_spec.detect { |hash| hash.has_key?('Stand-by') } ?
-      get_battery_time(raw_battery_spec.detect { |hash| hash.has_key?('Stand-by') }['Stand-by']) : nil
+      get_battery_time(raw_battery_spec.detect { |hash| hash.has_key?('Stand-by') }['Stand-by'][:text]) : nil
 
     battery_spec[:talk_time] = 
       raw_battery_spec.detect { |hash| hash.has_key?('Talk time') } ?
-      get_battery_time(raw_battery_spec.detect { |hash| hash.has_key?('Talk time') }['Talk time']) : nil
+      get_battery_time(raw_battery_spec.detect { |hash| hash.has_key?('Talk time') }['Talk time'][:text]) : nil
 
     return battery_spec
   end
@@ -73,7 +96,7 @@ class GsmArenaProductParser < ProductParser
 
     memory_spec[:internal] = 
       raw_memory_spec.detect { |hash| hash.has_key?('Internal') } ?
-      get_memory_internal_spec(raw_memory_spec.detect { |hash| hash.has_key?('Internal') }['Internal']) : nil
+      get_memory_internal_spec(raw_memory_spec.detect { |hash| hash.has_key?('Internal') }['Internal'][:text]) : nil
 
     return memory_spec
   end
@@ -103,7 +126,7 @@ class GsmArenaProductParser < ProductParser
 
     features_spec[:os] = 
       raw_features_spec.detect { |hash| hash.has_key?('OS') } ?
-      get_features_os_spec(raw_features_spec.detect { |hash| hash.has_key?('OS') }['OS']) : nil
+      get_features_os_spec(raw_features_spec.detect { |hash| hash.has_key?('OS') }['OS'][:text]) : nil
 
     return features_spec
   end
@@ -121,7 +144,7 @@ class GsmArenaProductParser < ProductParser
 
     display_spec[:size] = 
       raw_display_spec.detect { |hash| hash.has_key?('Size') } ?
-      get_display_size_spec(raw_display_spec.detect { |hash| hash.has_key?('Size') }['Size']) : nil
+      get_display_size_spec(raw_display_spec.detect { |hash| hash.has_key?('Size') }['Size'][:text]) : nil
 
     return display_spec
   end
@@ -157,15 +180,15 @@ class GsmArenaProductParser < ProductParser
 
     general_spec[:announced] = 
       raw_general_spec.detect { |hash| hash.has_key?('Announced') } ?
-      get_announced_spec(raw_general_spec.detect { |hash| hash.has_key?('Announced') }['Announced']) : nil
+      get_announced_spec(raw_general_spec.detect { |hash| hash.has_key?('Announced') }['Announced'][:text]) : nil
 
     general_spec[:status] = 
       raw_general_spec.detect { |hash| hash.has_key?('Status') } ? 
-      get_status_spec(raw_general_spec.detect { |hash| hash.has_key?('Status') }['Status']) : nil
+      get_status_spec(raw_general_spec.detect { |hash| hash.has_key?('Status') }['Status'][:text]) : nil
 
     general_spec[:sim] =
       raw_general_spec.detect { |hash| hash.has_key?('SIM') } ?
-      get_sim_spec(raw_general_spec.detect { |hash| hash.has_key?('SIM') }['SIM']) : nil
+      get_sim_spec(raw_general_spec.detect { |hash| hash.has_key?('SIM') }['SIM'][:text]) : nil
 
     return general_spec
   end

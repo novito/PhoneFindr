@@ -244,6 +244,21 @@ describe GsmArenaProductParser do
     end
 
 ################################################## 
+######## Price SPECS ###########################
+################################################## 
+
+    describe 'price specs' do
+      it 'returns a price' do
+        VCR.use_cassette 'gsm arena nokia lumia' do
+          nokia_lumia = 'http://www.gsmarena.com/nokia_lumia_1520-5760.php'
+          specs = parser.parse(nokia_lumia)
+
+          expect(specs[:price]).to eq({value: 430, currency: 'EUR', type: 'about'})
+        end
+      end
+    end
+
+################################################## 
 ######## Memory SPECS ###########################
 ################################################## 
 
