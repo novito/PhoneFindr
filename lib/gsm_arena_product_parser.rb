@@ -65,7 +65,7 @@ class GsmArenaProductParser < ProductParser
   end
 
   ##############################################################################
-  ##################### MEMORY SPECIFICATIONS #################################
+  ##################### BATTERY SPECIFICATIONS #################################
   ##############################################################################
 
   def get_battery_spec(raw_battery_spec)
@@ -102,19 +102,40 @@ class GsmArenaProductParser < ProductParser
   end
 
   def get_memory_internal_spec(raw_internal_spec)
-    # Remove after comma (avoid getting RAM memory)
+    # Differentiate with comma to get RAM too
     splitted_memory = raw_internal_spec.split(',')
-    internal_storage_result = []
+    internal_storage = nil
+    ram_storage = nil
 
-    unless splitted_memory[0].include?('RAM')
-      internal_storage = splitted_memory[0].scan(/(\d+)(?=(?:\/\d+)*\s*([MG]B))/)
-
-      internal_storage.each do |is|
-        internal_storage_result << {size: is[0].to_i, unit: is[1]}
-      end
+    if splitted_memory[0].include?('RAM')
+      ram_storage = get_ram_memory(splitted_memory[0])
+    else
+      internal_storage = get_internal_storage(splitted_memory[0])
     end
 
-    return internal_storage_result.any? ? internal_storage_result : nil
+    if splitted_memory.size > 1 && splitted_memory[1].include?('RAM')
+      ram_storage = get_ram_memory(splitted_memory[1])
+    end
+
+    return {storage: internal_storage, ram: ram_storage}
+  end
+
+  def get_ram_memory(ram_string)
+    ram_storage = ram_string.match(/(\d+)\s*([MG]B)/)
+    unless ram_storage.nil?
+      return {size: ram_storage[1].to_i, unit: ram_storage[2]}
+    end
+  end
+
+  def get_internal_storage(internal_storage_string)
+    internal_storage_result = []
+    internal_storage = internal_storage_string.scan(/(\d+)(?=(?:\/\d+)*\s*([MG]B))/)
+
+    internal_storage.each do |is|
+      internal_storage_result << {size: is[0].to_i, unit: is[1]}
+    end
+
+    return internal_storage_result
   end
 
   ##############################################################################
