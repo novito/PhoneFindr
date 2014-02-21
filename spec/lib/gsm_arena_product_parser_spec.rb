@@ -207,7 +207,7 @@ describe GsmArenaProductParser do
     end
 
 ################################################## 
-######## Memory SPECS ###########################
+######## Battery SPECS ###########################
 ################################################## 
   
 
@@ -269,7 +269,7 @@ describe GsmArenaProductParser do
             single_memory_phone = 'http://www.gsmarena.com/motorola_moto_g_dual_sim-5978.php'
             specs = parser.parse(single_memory_phone)
 
-            expect(specs[:memory][:internal][0]).to eq({size:8, unit: 'GB'})
+            expect(specs[:memory][:internal][:storage].first).to eq({size:8, unit: 'GB'})
           end
         end
       end
@@ -280,9 +280,17 @@ describe GsmArenaProductParser do
             just_ram_phone = 'http://www.gsmarena.com/nokia_108_dual_sim-5703.php'
             specs = parser.parse(just_ram_phone)
 
-            expect(specs[:memory][:internal]).to be_nil
+            expect(specs[:memory][:internal][:storage]).to be_nil
           end
+        end
 
+        it 'returns RAM memory' do
+          VCR.use_cassette 'gsm arena phone just RAM' do
+            just_ram_phone = 'http://www.gsmarena.com/nokia_108_dual_sim-5703.php'
+            specs = parser.parse(just_ram_phone)
+
+            expect(specs[:memory][:internal][:ram]).to eq({size:4, unit: 'MB'})
+          end
         end
       end
 
@@ -292,8 +300,8 @@ describe GsmArenaProductParser do
             multiple_memory_phone = 'http://www.gsmarena.com/motorola_moto_g_dual_sim-5978.php'
             specs = parser.parse(multiple_memory_phone)
 
-            expect(specs[:memory][:internal][0]).to eq({size:8, unit: 'GB'})
-            expect(specs[:memory][:internal][1]).to eq({size:16, unit: 'GB'})
+            expect(specs[:memory][:internal][:storage].first).to eq({size:8, unit: 'GB'})
+            expect(specs[:memory][:internal][:storage].last).to eq({size:16, unit: 'GB'})
           end
         end
 
@@ -303,8 +311,8 @@ describe GsmArenaProductParser do
             multiple_memory_phone = 'http://www.gsmarena.com/nokia_lumia_1520-5760.php'
             specs = parser.parse(multiple_memory_phone)
 
-            expect(specs[:memory][:internal][0]).to eq({size:16, unit: 'GB'})
-            expect(specs[:memory][:internal][1]).to eq({size:32, unit: 'GB'})
+            expect(specs[:memory][:internal][:storage].first).to eq({size:16, unit: 'GB'})
+            expect(specs[:memory][:internal][:storage].last).to eq({size:32, unit: 'GB'})
           end
         end
       end
