@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>PhoneFinder Admin</title>
+    <%= javascript_include_tag 'admin' %>
+  </head>
+
+  <body>
+    <%= link_to 'Sign out', destroy_user_session_path, method: :delete %>
+
+    <%= render partial: 'layouts/flashes' %>
+
+    <%= yield %>
+  </body>
+</html>

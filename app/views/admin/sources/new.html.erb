@@ -1,0 +1,6 @@
+<h1> Create a new source </h1>
+
+<%= form_for @source, url: admin_sources_path do |form| %>
+  <%= render partial: 'form', locals: { form: form } %>
+  <%= form.submit 'Create source' %>
+<% end %>
