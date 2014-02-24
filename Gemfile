@@ -56,5 +56,4 @@ end
 
 gem "nokogiri", "~> 1.6.1"
 gem "devise", "~> 3.2.2"
-gem "rails_admin", "~> 0.6.1"
 
