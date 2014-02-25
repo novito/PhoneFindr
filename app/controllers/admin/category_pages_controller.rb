@@ -21,7 +21,7 @@ class Admin::CategoryPagesController < ApplicationController
  private
 
  def category_page_params
-   params.require(:category_page).permit(:name, :url).merge(params.permit(:source_id))
+   params.require(:category_page).permit(:name, :url, :brand_id).merge(params.permit(:source_id))
  end
 
  def ensure_record_saved(record, success_message)

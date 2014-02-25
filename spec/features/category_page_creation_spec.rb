@@ -1,6 +1,10 @@
 require "spec_helper"
 
 feature 'Admin creates a new category page' do
+  before(:each) do
+    FactoryGirl.create(:brand, name: 'Samsung')
+  end
+
   let(:source) { create(:source, { :name => 'GSMArena', :url => 'http://www.gsmarena.com' }) }
 
   scenario 'fails to create because he is not an admin' do
@@ -49,14 +53,15 @@ feature 'Admin creates a new category page' do
       expect(page).to have_text("Name can't be blank")
     end
 
-    scenario 'creates a category page when a name and a url is present' do
+    scenario 'creates a category page when brand, name and url are present and valid' do
+
       fill_in 'Name', :with => 'Nokia Phones' 
       fill_in 'Url', :with => 'http://www.google.es' 
+      select 'Samsung', from: 'category_page_brand_id'
 
       click_button('Add Category Page')
       expect(page).to have_text("Category page has been added correctly!")
-      expect(page).to have_text("List of Category Pages for GSMArena")
-      expect(page).to have_text("Nokia Phones")
     end
+
   end
 end
