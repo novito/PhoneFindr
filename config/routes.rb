@@ -7,7 +7,9 @@ PhoneFindr::Application.routes.draw do
   root 'welcome#index'
 
   namespace :admin do
-    resources :sources
+    resources :sources do
+      resources :category_pages
+    end
   end
 
   # Example of regular route:
