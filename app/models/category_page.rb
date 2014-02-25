@@ -4,5 +4,7 @@ class CategoryPage < ActiveRecord::Base
 
   validates :url, presence: true
   validates :url, url:true
+  validates :name, presence:true 
   validates :source, presence:true
+
 end

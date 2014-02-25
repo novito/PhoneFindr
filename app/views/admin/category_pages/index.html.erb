@@ -1,0 +1,18 @@
+<% if @source %>
+  <h1> List of Category Pages for <%= @source.name %> </h1>
+  <table>
+    <tr>
+      <th>Name</th>
+      <th>Url</th>
+    </tr>
+
+    <% @category_pages.each do |cat_page| %>
+      <tr>
+        <td><%= cat_page.name %></td>
+        <td><%= cat_page.url %></td>
+      </tr>
+    <% end %>
+
+  </table>
+<% end %>
+<%= link_to 'Add a category page', new_admin_source_category_page_path %>

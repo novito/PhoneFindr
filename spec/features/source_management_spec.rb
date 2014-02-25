@@ -9,7 +9,7 @@ feature 'Admin accesses sources management' do
 
       visit admin_sources_path 
 
-      expect(page).to have_text('Hi there')
+      expect(page).to have_text('Welcome to PhoneFinder')
   end
 
   context 'being an admin' do
