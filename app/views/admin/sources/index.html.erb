@@ -1,17 +1,17 @@
+<h1> List of sources </h1>
 <table>
-
   <tr>
     <th>Name</th>
     <th>Url</th>
   </tr>
 
-<% @sources.each do |source| %>
-  <tr>
-    <td><%= source.name %></td>
-    <td><%= source.url %></td>
-  </tr>
-
-
-<% end %>
+  <% @sources.each do |source| %>
+    <tr>
+      <td><%= source.name %></td>
+      <td><%= source.url %></td>
+    </tr>
+  <% end %>
 
 </table>
+
+<%= link_to 'Add a source', new_admin_source_path %>
