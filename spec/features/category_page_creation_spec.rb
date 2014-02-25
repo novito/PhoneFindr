@@ -35,5 +35,28 @@ feature 'Admin creates a new category page' do
       expect(page).to have_text("Url can't be blank")
     end
 
+    scenario 'fails to create because the url is invalid' do
+      fill_in 'Name', :with => 'Nokia phones' 
+
+      click_button('Add Category Page')
+      expect(page).to have_text("Url must be a valid URL")
+    end
+
+    scenario 'fails to create because the name of the category is missing' do
+      fill_in 'Url', :with => 'http://www.google.es' 
+
+      click_button('Add Category Page')
+      expect(page).to have_text("Name can't be blank")
+    end
+
+    scenario 'creates a category page when a name and a url is present' do
+      fill_in 'Name', :with => 'Nokia Phones' 
+      fill_in 'Url', :with => 'http://www.google.es' 
+
+      click_button('Add Category Page')
+      expect(page).to have_text("Category page has been added correctly!")
+      expect(page).to have_text("Category pages for GSMArena")
+      expect(page).to have_text("Nokia Phones")
+    end
   end
 end

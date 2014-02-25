@@ -13,6 +13,11 @@ class Admin::CategoryPagesController < ApplicationController
    ensure_record_saved(@category_page, 'Category page has been added correctly!')
  end
 
+ def index
+   @source = Source.find_by_id(params[:source_id])
+   @category_pages = @source.category_pages if @source 
+ end
+
  private
 
  def category_page_params
