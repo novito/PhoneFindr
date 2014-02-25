@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140225042112) do
+ActiveRecord::Schema.define(version: 20140225045534) do
 
   create_table "category_pages", force: true do |t|
     t.integer  "source_id"
@@ -19,6 +19,7 @@ ActiveRecord::Schema.define(version: 20140225042112) do
     t.string   "url"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "name"
   end
 
   create_table "device_categories", force: true do |t|

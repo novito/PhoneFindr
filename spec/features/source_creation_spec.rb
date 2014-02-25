@@ -9,7 +9,7 @@ feature 'Admin creates a new source' do
 
     visit new_admin_source_path 
 
-    expect(page).to have_text('Hi there')
+    expect(page).to have_text('Welcome to PhoneFinder')
   end
 
   context 'being an admin' do
