@@ -1,6 +1,6 @@
 class DevicePage < ActiveRecord::Base
-  belongs_to :category_url
+  belongs_to :category_page
 
-  validates :category_url, presence: true
+  validates :category_page, presence: true
   validates :url, presence: true
 end

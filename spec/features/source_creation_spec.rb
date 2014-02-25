@@ -15,7 +15,6 @@ feature 'Admin creates a new source' do
   context 'being an admin' do
     let(:user) { create(:user, :admin) }
 
-
     scenario 'fails to create because if there is no name' do
       sign_in(user)
       visit new_admin_source_path
