@@ -27,7 +27,8 @@ class Admin::SourcesController < ApplicationController
    if record.save
      redirect_to admin_sources_path, notice: success_message
    else
-     redirect_to admin_sources_path, alert: record.errors.full_messages
+     flash[:alert] = record.errors.full_messages
+     render :new 
    end
  end
 

@@ -1,6 +1,6 @@
 <h1> Create a new source </h1>
 
-<%= form_for @source, url: admin_sources_path do |form| %>
+<%= form_for @source, url: admin_sources_path, :html => {:class => "form-horizontal"} do |form| %>
   <%= render partial: 'form', locals: { form: form } %>
-  <%= form.submit 'Create source' %>
+  <%= form.submit 'Create source', class: 'btn btn-default' %>
 <% end %>
