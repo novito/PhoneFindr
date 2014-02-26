@@ -18,6 +18,10 @@ class Admin::CategoryPagesController < ApplicationController
    @category_pages = @source.category_pages if @source 
  end
 
+ def show
+   @category_page = CategoryPage.find(params[:id])
+ end
+
  private
 
  def category_page_params

@@ -10,7 +10,9 @@ PhoneFindr::Application.routes.draw do
     resources :sources do
       resources :category_pages
     end
+    resources :category_parsing_results, except: [:index, :create, :new]
   end
+
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
