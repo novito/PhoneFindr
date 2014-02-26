@@ -4,8 +4,13 @@ FactoryGirl.define do
   factory :category_page do
     source
     brand
-    last_parsed "2014-02-05 08:46:18"
     name 'Nokia phones'
     url "http://www.gsmarena.com/nokia-phones-1.php"
+
+    factory :category_page_with_parsed_results do
+      after(:create) do |cat_page|
+        create_list(:category_parsing_result, 1, category_page: cat_page)
+      end
+    end
   end
 end
