@@ -17,6 +17,12 @@ class Admin::SourcesController < ApplicationController
    ensure_record_saved(@source, 'Source has been created!')
  end
 
+ def destroy
+   @source = Source.find_by_id(params[:id])
+   @source.destroy
+   redirect_to admin_sources_path, notice: 'Source deleted correctly.'
+ end
+
  private
 
  def source_params

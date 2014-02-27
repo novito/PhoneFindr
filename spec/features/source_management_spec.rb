@@ -33,6 +33,21 @@ feature 'Admin accesses sources management' do
       expect(page).to have_text("GSMArena")
     end
 
+    scenario 'can delete a particular source' do
+      sign_in(user)
+      visit admin_sources_path 
+
+      click_button('Delete source')
+      expect(page).to have_text('Source deleted correctly.')
+    end
+
+    scenario 'can add a category page for a source' do
+      sign_in(user)
+      visit admin_sources_path 
+
+      click_link('Add category page')
+      expect(page).to have_text('Create a new category page for the source')
+    end
   end
 end
 

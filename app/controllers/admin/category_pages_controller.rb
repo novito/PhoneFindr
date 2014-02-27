@@ -31,6 +31,12 @@ class Admin::CategoryPagesController < ApplicationController
    ParseCatWorker.perform_async(category_parsing_result.id, @category_page.id)
  end
 
+ def destroy
+   @cat_page = CategoryPage.find_by_id(params[:id])
+   @cat_page.destroy
+   redirect_to admin_category_pages_path, notice: 'Category page deleted correctly.'
+ end
+
  private
 
  def category_page_params
@@ -39,7 +45,7 @@ class Admin::CategoryPagesController < ApplicationController
 
  def ensure_record_saved(record, success_message)
    if record.save
-     redirect_to admin_category_pages_path, notice: success_message
+     redirect_to admin_category_pages_path(source_id: record.source_id), notice: success_message
    else
      flash[:alert] = record.errors.full_messages
      render :new 

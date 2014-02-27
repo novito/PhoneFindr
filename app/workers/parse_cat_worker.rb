@@ -10,8 +10,10 @@ class ParseCatWorker
     cat_parser = GsmArenaCategoryParser.new
     results = cat_parser.parse(cat_page.url) if cat_page
 
-    results.each do |result|
-      DevicePage.create(category_parsing_result_id: result_id, url: result)
+    if results
+      results.each do |result|
+        DevicePage.create(category_parsing_result_id: result_id, url: result)
+      end
     end
   end
 end

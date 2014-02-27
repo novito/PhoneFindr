@@ -9,6 +9,8 @@
     <tr>
       <td><%= source.name %></td>
       <td><%= source.url %></td>
+      <td><%= button_to 'Delete source', admin_source_path(source), method: :delete %></td>
+      <td><%= link_to 'Add category page', new_admin_category_page_path(source_id: source.id) %></td>
     </tr>
   <% end %>
 

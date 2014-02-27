@@ -1,8 +1,7 @@
 class CategoryPage < ActiveRecord::Base
   belongs_to :source
   belongs_to :brand
-  has_many :device_pages
-  has_many :category_parsing_results
+  has_many :category_parsing_results, :dependent => :destroy
 
   validates :url, presence: true
   validates :url, url:true

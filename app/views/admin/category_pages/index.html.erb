@@ -10,6 +10,9 @@
       <tr>
         <td><%= cat_page.name %></td>
         <td><%= cat_page.url %></td>
+        <td><%= cat_page.url %></td>
+        <td><%= link_to 'Manage category page', admin_category_page_path(cat_page) %></td>
+        <td><%= button_to 'Delete category page', admin_category_page_path(cat_page), method: :delete %></td>
       </tr>
     <% end %>
 
