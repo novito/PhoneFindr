@@ -1,2 +1,9 @@
-<h1> Parsing results </h1>
+<h1> Parsing results for <%= @cat_parsing_result.category_page.name %> </h1>
 <p> Parsing date: <%= @cat_parsing_result.date %> </p>
+
+<div class='results'>
+  <% @cat_parsing_result.device_pages.each do |device_page| %>
+    Device page URL: <%= device_page.url %>
+    <br>
+  <% end %>
+</div>

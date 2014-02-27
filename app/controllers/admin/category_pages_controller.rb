@@ -5,10 +5,11 @@ class Admin::CategoryPagesController < ApplicationController
 
  def new
    @category_page = CategoryPage.new
-   @source_id = params[:source_id]
+   @source = Source.find_by_id(params[:source_id])
  end
 
  def create
+   @source = Source.find_by_id(params[:category_page][:source_id])
    @category_page = CategoryPage.new(category_page_params)
 
    ensure_record_saved(@category_page, 'Category page has been added correctly!')
@@ -25,6 +26,9 @@ class Admin::CategoryPagesController < ApplicationController
 
  def parse
    @category_page = CategoryPage.find(params[:id])
+   category_parsing_result = CategoryParsingResult.create(category_page: @category_page, 
+                                                          date: DateTime.now) 
+   ParseCatWorker.perform_async(category_parsing_result.id, @category_page.id)
  end
 
  private

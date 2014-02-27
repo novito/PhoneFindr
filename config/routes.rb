@@ -16,6 +16,9 @@ PhoneFindr::Application.routes.draw do
     resources :category_parsing_results, except: [:index, :create, :new]
   end
 
+  require 'sidekiq/web'
+  mount Sidekiq::Web, at: '/sidekiq'
+
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

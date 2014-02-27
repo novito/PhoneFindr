@@ -53,13 +53,18 @@ group :development, :test do
   gem "rspec-rails", "~> 2.14.1"
   gem "factory_girl_rails", "~> 4.3.0"
   gem "database_cleaner", "~> 1.2.0"
-  gem "webmock", "~> 1.17.2"
   gem "vcr", "~> 2.8.0"
   gem "capybara", "~> 2.2.1"
   gem "sqlite3"
 end
 
+group :test do
+  gem "webmock", "~> 1.17.2"
+end
+
+gem "sinatra", "~> 1.4.4"
 
 gem "nokogiri", "~> 1.6.1"
 gem "devise", "~> 3.2.2"
+gem "sidekiq", "~> 2.17.6"
 
