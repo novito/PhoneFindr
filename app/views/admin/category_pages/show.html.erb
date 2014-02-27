@@ -1,9 +1,22 @@
-<h1> <%= @category_page.name %> </h1>
+<h1> Category page: <%= @category_page.name %> </h1>
 
+<div class="last-parsed-info">
+  <p> <%= link_to @category_page.url, @category_page.url %> </p>
+  <p>
+  <% if last_parsed_result = @category_page.last_parsed_result %>
+    Last parsed date was: <%= last_parsed_result.date %>
+    <%= link_to 'See parsing results', admin_category_parsing_result_path(@category_page.last_parsed_result) %>  
+  <% else %>
+    Page has not been parsed yet 
+  <% end %>
+  </p>
+</div>
+
+<div class="actions">
 <p>
-<% if last_parsed_result = @category_page.last_parsed_result %>
-  Last parsed date was: <%= last_parsed_result.date %>
-  <%= link_to 'See parsing results', admin_category_parsing_result_path(@category_page.last_parsed_result) %>  
-<% else %>
-  Page has not been parsed yet 
-<% end %>
+  <%= form_tag(parse_admin_category_page_path(params[:id]), method: :post) do |form| %>
+    <div><%= submit_tag 'Start parsing' %></div>
+  <% end %>
+</p>
+</div>
+

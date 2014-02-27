@@ -11,7 +11,7 @@ feature 'Admin creates a new category page' do
     user = create(:user, :not_admin)
     sign_in(user)
 
-    visit new_admin_source_category_page_path(source) 
+    visit new_admin_category_page_path(source_id: source.id) 
 
     expect(page).to have_text('Welcome to PhoneFinder')
   end
@@ -19,7 +19,7 @@ feature 'Admin creates a new category page' do
   scenario 'fails to create because is a non logged in admin' do
     user = create(:user, :admin)
 
-    visit new_admin_source_category_page_path(source) 
+    visit new_admin_category_page_path(source_id: source.id)
 
     expect(page).to have_text('Sign in')
   end
@@ -29,7 +29,7 @@ feature 'Admin creates a new category page' do
 
     before(:each) do
       sign_in(user)
-      visit new_admin_source_category_page_path(source) 
+      visit new_admin_category_page_path(source_id: source) 
     end
 
     scenario 'fails to create because the url of the category is missing' do

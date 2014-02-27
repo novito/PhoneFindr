@@ -5,10 +5,11 @@ class Admin::CategoryPagesController < ApplicationController
 
  def new
    @category_page = CategoryPage.new
+   @source_id = params[:source_id]
  end
 
  def create
-   @category_page = CategoryPage.new(category_page_params.merge(source_id: params[:source_id]))
+   @category_page = CategoryPage.new(category_page_params)
 
    ensure_record_saved(@category_page, 'Category page has been added correctly!')
  end
@@ -22,15 +23,19 @@ class Admin::CategoryPagesController < ApplicationController
    @category_page = CategoryPage.find(params[:id])
  end
 
+ def parse
+   @category_page = CategoryPage.find(params[:id])
+ end
+
  private
 
  def category_page_params
-   params.require(:category_page).permit(:name, :url, :brand_id).merge(params.permit(:source_id))
+   params.require(:category_page).permit(:name, :url, :brand_id, :source_id)
  end
 
  def ensure_record_saved(record, success_message)
    if record.save
-     redirect_to admin_source_category_pages_path, notice: success_message
+     redirect_to admin_category_pages_path, notice: success_message
    else
      flash[:alert] = record.errors.full_messages
      render :new 

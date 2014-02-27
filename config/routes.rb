@@ -7,8 +7,11 @@ PhoneFindr::Application.routes.draw do
   root 'welcome#index'
 
   namespace :admin do
-    resources :sources do
-      resources :category_pages
+    resources :sources
+    resources :category_pages do
+      member do
+        post :parse
+      end
     end
     resources :category_parsing_results, except: [:index, :create, :new]
   end

@@ -1,6 +1,6 @@
 <h1> Create a new category page </h1>
 
-<%= form_for [params[:source_id], @category_page], url: admin_source_category_pages_path, :html => {:class => "form-horizontal"} do |form| %>
+<%= form_for @category_page, url: admin_category_pages_path, :html => {:class => "form-horizontal"} do |form| %>
   <%= render partial: 'form', locals: { form: form, brands: @brands } %>
   <%= form.submit 'Add Category Page', class: 'btn btn-default' %>
 <% end %>

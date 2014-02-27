@@ -7,7 +7,7 @@ feature 'Admin can see a category page' do
     user = create(:user, :not_admin)
     sign_in(user)
 
-    visit admin_source_category_page_path(category_page.source, category_page) 
+    visit admin_category_page_path(category_page) 
 
     expect(page).to have_text('Welcome to PhoneFinder')
   end
@@ -15,7 +15,7 @@ feature 'Admin can see a category page' do
   scenario 'fails to show because he is not admin' do
     user = create(:user, :admin)
 
-    visit admin_source_category_page_path(category_page.source, category_page) 
+    visit admin_category_page_path(category_page) 
 
     expect(page).to have_text('Sign in')
   end
@@ -24,15 +24,29 @@ feature 'Admin can see a category page' do
     before(:each) do
       user = create(:user, :admin)
       sign_in(user)
-      visit admin_source_category_page_path(category_page.source, category_page) 
+      visit admin_category_page_path(category_page) 
     end
 
-    scenario 'can see when was last time the cat page was parsed' do
+    scenario 'shows the url of the category page' do
+      expect(page).to have_link('http://www.gsmarena.com/nokia-phones-1.php') 
+    end
+
+    scenario 'shows the name of the category page' do
+      expect(page).to have_text('Nokia phones for GSMArena')
+    end
+
+    scenario 'shows the last time the cat page was parsed' do
       expect(page).to have_text('2012-01-01')
     end
 
-    scenario 'can go to the last parsing results' do
+    scenario 'allows to go to the last parsing results' do
       click_link('See parsing results')
+      expect(page).to have_text('Parsing date: 2012-01-01')
+    end
+
+    scenario 'allows to start a new parsing for the cat page' do
+      click_button('Start parsing')
+      expect(page).to have_text('Category parser working on it...')
     end
   end
 

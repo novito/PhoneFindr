@@ -4,6 +4,7 @@ class Admin::CategoryParsingResultsController < ApplicationController
  layout 'admin'
 
  def show
+   @cat_parsing_result = CategoryParsingResult.find_by_id(params[:id])
  end
 
 end

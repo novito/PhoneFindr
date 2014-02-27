@@ -12,3 +12,5 @@
   <%= form.label :brand, 'Brand' %>
   <%= form.collection_select :brand_id, Brand.all, :id, :name %>
 </div>
+
+<%= form.hidden_field :source_id, :value => @source_id %>
