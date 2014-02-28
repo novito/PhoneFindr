@@ -48,6 +48,14 @@ describe GsmArenaProductParser do
           end
         end
 
+        it 'returns the name of the phone' do
+          VCR.use_cassette 'gsm arena available phone' do
+            available_phone = 'http://www.gsmarena.com/nokia_lumia_1520-5760.php'
+            specs = parser.parse(available_phone)
+            expect(specs[:name]).to eql('Nokia Lumia 1520')
+          end
+        end
+
         it 'returns an announced date' do
           VCR.use_cassette 'gsm arena available phone' do
             available_phone = 'http://www.gsmarena.com/nokia_lumia_1520-5760.php'

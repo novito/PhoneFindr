@@ -26,8 +26,15 @@ class GsmArenaProductParser < ProductParser
         results[category_key] << {spec_key => {text: spec_content.text, html: spec_content}}
       end
     end
+
+    # Find phone name 
+    results[:name] = get_phone_name(html)
     
     return results
+  end
+
+  def get_phone_name(html)
+    return html.css('h1').children.first.text
   end
 
   def clean_raw_specs(raw_specs)
@@ -39,6 +46,7 @@ class GsmArenaProductParser < ProductParser
     specs[:memory] = raw_specs.has_key?('Memory') ? get_memory_spec(raw_specs['Memory']) : nil
     specs[:battery] = raw_specs.has_key?('Battery') ? get_battery_spec(raw_specs['Battery']) : nil
     specs[:price] = raw_specs.has_key?('Misc') ? get_price_spec(raw_specs['Misc']) : nil
+    specs[:name] = raw_specs[:name]
 
     return specs
   end
