@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140226050259) do
+ActiveRecord::Schema.define(version: 20140228060105) do
 
   create_table "brands", force: true do |t|
     t.text     "name"
@@ -54,6 +54,16 @@ ActiveRecord::Schema.define(version: 20140226050259) do
     t.text     "name"
     t.text     "value"
     t.integer  "device_page"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "devices", force: true do |t|
+    t.integer  "device_page_id"
+    t.string   "picture_url"
+    t.datetime "date"
+    t.boolean  "available"
+    t.text     "operating_system"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

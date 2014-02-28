@@ -12,7 +12,8 @@ class ParseCatWorker
 
     if results
       results.each do |result|
-        DevicePage.create(category_parsing_result_id: result_id, url: result)
+        device_page = DevicePage.create(category_parsing_result_id: result_id, url: result)
+        ParsePageWorker.perform_async(device_page.id)
       end
     end
   end
