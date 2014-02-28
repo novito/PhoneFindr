@@ -3,6 +3,7 @@ require 'gsm_arena_category_parser'
 class ParseCatWorker
   include Sidekiq::Worker
   sidekiq_options queue: "parse_cat"
+  sidekiq_options :retry => false
 
   def perform(result_id, category_page_id)
     cat_page = CategoryPage.find_by_id(category_page_id)

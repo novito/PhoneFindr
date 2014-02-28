@@ -56,7 +56,6 @@ describe GsmArenaProductParser do
           end
         end
 
-
         it 'returns an announced date' do
           VCR.use_cassette 'gsm arena available phone' do
             available_phone = 'http://www.gsmarena.com/nokia_lumia_1520-5760.php'

@@ -6,6 +6,7 @@ class CreateDevice < ActiveRecord::Migration
       t.datetime :date
       t.boolean :available
       t.text :operating_system
+      t.string :name
 
       t.timestamps
     end
