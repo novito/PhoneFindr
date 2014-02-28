@@ -54,7 +54,7 @@ feature 'Admin accesses sources management' do
       visit admin_sources_path 
 
       click_link('See category pages for this source')
-      expect(page).to have_text('Category page')
+      expect(page).to have_text('Category Pages for')
     end
   end
 end
