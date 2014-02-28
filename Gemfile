@@ -69,3 +69,4 @@ gem "nokogiri", "~> 1.6.1"
 gem "devise", "~> 3.2.2"
 gem "sidekiq", "~> 2.17.6"
 
+gem "unicorn", "~> 4.8.2"
