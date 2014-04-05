@@ -1,10 +1,11 @@
 PhoneFindr::Application.routes.draw do
+  get "static_pages/index"
   devise_for :users
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
-  root 'welcome#index'
+  #root 'welcome#index'
 
   namespace :admin do
     resources :sources
@@ -16,9 +17,16 @@ PhoneFindr::Application.routes.draw do
     resources :category_parsing_results, except: [:index, :create, :new]
   end
 
+  scope :api do
+    get "/devices(.:format)" => "devices#index"
+    get "/devices/:id(.:format)" => "devices#show"
+  end
+
   require 'sidekiq/web'
   mount Sidekiq::Web, at: '/sidekiq'
 
+  # Angular
+  root 'static_pages#index'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
