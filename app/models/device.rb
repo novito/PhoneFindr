@@ -14,8 +14,6 @@ class Device < ActiveRecord::Base
       self.available = specs[:general][:status][:available] 
     end
 
-    p "SELF IS"
-    p self
     self.save!
   end
 end

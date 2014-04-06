@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="PhoneFinder">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
@@ -42,7 +42,9 @@
       <div class="row-fluid">
         <div class="span12">
           <%= bootstrap_flash %>
-          <%= yield %>
+          <div ng-view>
+            <%= yield %>
+          </div>
         </div>
       </div><!--/row-->
     </div> <!-- /container -->
