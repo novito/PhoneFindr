@@ -2,7 +2,9 @@
   <div id="devices-list-container">
     <ul>
       <li ng-repeat="device in devices">
-      <h3>{{device.name}}</h3>
+      <a href="#/devices/{{device.id}}">
+        {{device.name}}
+      </a>
       </li>
     </ul>
   </div>

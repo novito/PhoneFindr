@@ -2,7 +2,7 @@ window.App = angular.module('PhoneFinder', ['ngResource', 'ngRoute']);
 
 App.config(['$routeProvider', function($routeProvider) {
   $routeProvider.
-	when("/devices", {templateUrl: "../../templates/devices/index.html", controller: "driversController"}).
-	when("/drivers/:id", {templateUrl: "../../templates/devices/show.html", controller: "driverController"}).
-	otherwise({redirectTo: '/drivers'});
+	when("/devices", {templateUrl: "assets/devices/index.html", controller: "DevicesListCtrl"}).
+	when("/devices/:id", {templateUrl: "assets/devices/show.html", controller: "DevicesShowCtrl"}).
+	otherwise({redirectTo: '/devices'});
 }]);
