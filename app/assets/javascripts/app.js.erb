@@ -6,8 +6,8 @@ window.App = angular.module('PhoneFinder', ['ngResource', 'ngRoute']);
 
 App.config(['$routeProvider', function($routeProvider) {
   $routeProvider.
-	when("/devices", {templateUrl: "<%= asset_path('assets/devices/index.html') %>", controller: "DevicesListCtrl"}).
-	when("/devices/:id", {templateUrl: "<%= asset_path('assets/devices/show.html') %>", controller: "DevicesShowCtrl"}).
-    when("/", {templateUrl: "<%= asset_path('assets/devices/select.html') %>", controller: "DevicesSelectCtrl"}).
+	when("/devices", {templateUrl: "<%= asset_path('devices/index.html') %>", controller: "DevicesListCtrl"}).
+	when("/devices/:id", {templateUrl: "<%= asset_path('devices/show.html') %>", controller: "DevicesShowCtrl"}).
+    when("/", {templateUrl: "<%= asset_path('devices/select.html') %>", controller: "DevicesSelectCtrl"}).
 	otherwise({redirectTo: '/devices'});
 }]);
