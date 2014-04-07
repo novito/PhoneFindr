@@ -1,0 +1,95 @@
+<form class="form-horizontal">
+
+  <ul class="nav nav-tabs">
+    <li ng-repeat="step in steps" ng-class="{active: $index==getCurrentStepIndex()}">
+      <a href="javascript:void(0)" ng-click="goToStep($index)">{{step}}</a>
+    </li>
+  </ul>
+  <div ng-switch on="selection">
+
+    <!-- First Step -->
+    <div ng-switch-when="How much do you talk?">
+      <div class="row">
+        <div class="span4">
+          <div class="control-group">
+            <span> Would you say you spend long hours talking on the phone? </span>
+            <div class="controls">
+              <label class="radio">
+                <input type="radio" name="device_hours" id="device_hours_long" value="Yes" ng-model='states[0].selection.hours'>
+                Yes 
+              </label>
+              <label class="radio">
+                <input type="radio" name="device_hours" id="device_hours_short" value="No", ng-model='states[0].selection.hours'>
+                No 
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Second Step -->
+    <div ng-switch-when="Operating System">
+      <div class="row">
+        <div class="span4">
+          <div class="control-group">
+            <span> Any preferences in terms of Operating System?</span>
+            <div class="controls">
+              <label class="checkbox">
+                <input type="checkbox" value="ios" id="selection_os_iOS" ng-model="states[1].selection.ios"> iOS
+              </label>
+              <label class="checkbox">
+                <input type="checkbox" value="android" id="selection_os_android" ng-model="states[1].selection.android"> Android 
+              </label>
+              <label class="checkbox">
+                <input type="checkbox" value="windows" id="selection_os_windows" ng-model="states[1].selection.windows"> Windows
+              </label>
+              <label class="checkbox">
+                <input type="checkbox" value="bb" id="selection_os_bb" ng-model="states[1].selection.bb"> Black Berry 
+              </label>
+              <label class="checkbox">
+                <input type="checkbox" value="dunno" id="selection_os_dunno" ng-model="states[1].selection.dunno"> I don't care 
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Third Step -->
+    <div ng-switch-when="Keyboard">
+      <div class="row">
+        <div class="span4">
+          <div class="control-group">
+            <span> Which kind of keyboard do you prefer?</span>
+            <div class="controls">
+              <label class="radio">
+                <input type="radio" name="user[role]" id="user_role_managing_editor" value="Managing editor">
+                Touch 
+              </label>
+              <label class="radio">
+                <input type="radio" name="user[role]" id="user_role_area_editor" value="Area editor">
+                Physical 
+              </label>
+              <label class="radio">
+                <input type="radio" name="user[role]" id="user_role_area_editor" value="Area editor">
+                Any 
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="clearfix"></div>
+  <ul class="pager pull-left">
+    <li class="" ng-class="{disabled: !hasPreviousStep()}">
+      <a href="javascript:void(0);" ng-click="decrementStep()">&larr; Previous Step</a>
+    </li>
+    <li class="" ng-class="{disabled: !hasNextStep()}">
+      <a href="javascript:void(0);" ng-click="incrementStep()">Next Step &rarr;</a>
+    </li>
+  </ul>
+  <div class="pull-right" ng-show="!hasNextStep()"><button style="margin:20px 0;" class="btn btn-success">Show me the devices!</button></div>
+  <div class="clearfix"></div>
+</form>
