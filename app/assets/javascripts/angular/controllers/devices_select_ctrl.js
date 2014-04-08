@@ -8,6 +8,10 @@ App.controller('DevicesSelectCtrl', ['$scope', '$location', 'DeviceSelection', f
 
   $scope.states=$deviceSelection;
 
+  $scope.submitForm = function(){
+      $location.path("/devices");
+  };
+
   $scope.getCurrentStepIndex = function(){
     // Get the index of the current step given selection
     return _.indexOf($scope.steps, $scope.selection);
