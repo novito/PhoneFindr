@@ -15,11 +15,11 @@
             <span> Would you say you spend long hours talking on the phone? </span>
             <div class="controls">
               <label class="radio">
-                <input type="radio" name="device_hours" id="device_hours_long" value="Yes" ng-model='states[0].selection.hours'>
+                <input type="radio" name="device_hours" id="device_hours_long" value="Yes" ng-model='selections.longHour'>
                 Yes 
               </label>
               <label class="radio">
-                <input type="radio" name="device_hours" id="device_hours_short" value="No", ng-model='states[0].selection.hours'>
+                <input type="radio" name="device_hours" id="device_hours_short" value="No", ng-model='selections.longHour'>
                 No 
               </label>
             </div>
@@ -35,20 +35,8 @@
           <div class="control-group">
             <span> Any preferences in terms of Operating System?</span>
             <div class="controls">
-              <label class="checkbox">
-                <input type="checkbox" value="ios" id="selection_os_iOS" ng-model="states[1].selection.ios"> iOS
-              </label>
-              <label class="checkbox">
-                <input type="checkbox" value="android" id="selection_os_android" ng-model="states[1].selection.android"> Android 
-              </label>
-              <label class="checkbox">
-                <input type="checkbox" value="windows" id="selection_os_windows" ng-model="states[1].selection.windows"> Windows
-              </label>
-              <label class="checkbox">
-                <input type="checkbox" value="bb" id="selection_os_bb" ng-model="states[1].selection.bb"> Black Berry 
-              </label>
-              <label class="checkbox">
-                <input type="checkbox" value="dunno" id="selection_os_dunno" ng-model="states[1].selection.dunno"> I don't care 
+              <label ng-repeat="operatingSystem in operatingSystems" class="checkbox">
+                <input type="checkbox" name="operating_systems[]" value="{{operatingSystem.id}}" ng-checked="selections.operatingSystems.indexOf(operatingSystem.id) > -1" ng-click="toogleSelectionOS(operatingSystem.id)"> {{operatingSystem.name}} 
               </label>
             </div>
           </div>
@@ -64,15 +52,15 @@
             <span> Which kind of keyboard do you prefer?</span>
             <div class="controls">
               <label class="radio">
-                <input type="radio" name="user[role]" id="user_role_managing_editor" value="Managing editor">
+                <input type="radio" value="touch" id="selection_keyboard_touch" ng-model="selections.keyboard">
                 Touch 
               </label>
               <label class="radio">
-                <input type="radio" name="user[role]" id="user_role_area_editor" value="Area editor">
+                <input type="radio" value="physical" id="selection_keyboard_physical" ng-model="selections.keyboard">
                 Physical 
               </label>
               <label class="radio">
-                <input type="radio" name="user[role]" id="user_role_area_editor" value="Area editor">
+                <input type="radio" name="any" id="selection_keyboard_any" ng-model="selections.keyboard">
                 Any 
               </label>
             </div>

@@ -6,10 +6,26 @@ App.controller('DevicesSelectCtrl', ['$scope', '$location', 'DeviceSelection', f
     ];
   $scope.selection = $scope.steps[0];
 
-  $scope.states=$deviceSelection;
+  $scope.selections=$deviceSelection.selections;
+  $scope.operatingSystems = $deviceSelection.operatingSystems;
 
   $scope.submitForm = function(){
       $location.path("/devices");
+  };
+
+
+  $scope.toogleSelectionOS = function toogleSelectionOS(os) {
+      var idx = $scope.selections.operatingSystems.indexOf(os);
+
+      // is currently selected
+      if (idx > -1) {
+          $scope.selections.operatingSystems.splice(idx, 1);
+      }
+
+      // is newly selected
+      else {
+          $scope.selections.operatingSystems.push(os);
+      }
   };
 
   $scope.getCurrentStepIndex = function(){
