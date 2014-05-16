@@ -9,6 +9,7 @@ class GsmArenaCategoryParser < CategoryParser
     html = Nokogiri::HTML(open(current_url)) 
     num_pages = find_n_pages(html)
     anchors = []
+    num_pages = 1
 
     while current_page <= num_pages 
       html.css('.makers li a').each { |anchor| anchors << build_absolute_url(url, anchor['href']) }

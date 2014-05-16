@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140228060105) do
+ActiveRecord::Schema.define(version: 20140515051744) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -70,6 +70,19 @@ ActiveRecord::Schema.define(version: 20140228060105) do
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "announced"
+    t.string   "raw_sim"
+    t.string   "raw_status"
+    t.string   "raw_network_2g"
+    t.string   "raw_network_3g"
+    t.string   "raw_network_4g"
+    t.string   "raw_dimensions"
+    t.string   "raw_weight"
+    t.string   "raw_display_type"
+    t.string   "raw_display_size"
+    t.string   "raw_sound_alert_types"
+    t.string   "raw_sound_loudspeaker"
+    t.string   "raw_sound_35_mm_jack"
   end
 
   create_table "sources", force: true do |t|

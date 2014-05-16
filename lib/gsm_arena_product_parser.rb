@@ -41,7 +41,9 @@ class GsmArenaProductParser < ProductParser
     specs = {}
 
     specs[:general] = raw_specs.has_key?('General') ? get_general_spec(raw_specs['General']) : nil
+    specs[:body] = raw_specs.has_key?('Body') ? get_body_spec(raw_specs['Body']) : nil
     specs[:display] = raw_specs.has_key?('Display') ? get_display_spec(raw_specs['Display']) : nil
+    specs[:sound] = raw_specs.has_key?('Sound') ? get_sound_specs(raw_specs['Sound']) : nil
     specs[:features] = raw_specs.has_key?('Features') ? get_features_spec(raw_specs['Features']) : nil
     specs[:memory] = raw_specs.has_key?('Memory') ? get_memory_spec(raw_specs['Memory']) : nil
     specs[:battery] = raw_specs.has_key?('Battery') ? get_battery_spec(raw_specs['Battery']) : nil
@@ -165,11 +167,37 @@ class GsmArenaProductParser < ProductParser
   end
 
   ##############################################################################
+  ##################### BODY SPECIFICATIONS #################################
+  ##############################################################################
+  
+  def get_body_spec(raw_body_spec)
+    body_spec = {}
+
+    body_spec[:raw_dimensions] = 
+      raw_body_spec.detect { |hash| hash.has_key?('Dimensions') } ?
+      raw_body_spec.detect { |hash| hash.has_key?('Dimensions') }['Dimensions'][:text] : nil
+
+    body_spec[:raw_weight] = 
+      raw_body_spec.detect { |hash| hash.has_key?('Weight') } ?
+      raw_body_spec.detect { |hash| hash.has_key?('Weight') }['Weight'][:text] : nil
+
+    return body_spec
+  end
+
+  ##############################################################################
   ##################### DISPLAY SPECIFICATIONS #################################
   ##############################################################################
 
   def get_display_spec(raw_display_spec)
     display_spec = {}
+
+    display_spec[:raw_display_type] =
+      raw_display_spec.detect { |hash| hash.has_key?('Type') } ?
+      raw_display_spec.detect { |hash| hash.has_key?('Type') }['Type'][:text] : nil
+
+    display_spec[:raw_display_size] =
+      raw_display_spec.detect { |hash| hash.has_key?('Size') } ?
+      raw_display_spec.detect { |hash| hash.has_key?('Size') }['Size'][:text] : nil
 
     display_spec[:size] = 
       raw_display_spec.detect { |hash| hash.has_key?('Size') } ?
@@ -177,6 +205,31 @@ class GsmArenaProductParser < ProductParser
 
     return display_spec
   end
+
+  ##############################################################################
+  ##################### SOUND SPECIFICATIONS #################################
+  ##############################################################################
+
+  def get_sound_specs(raw_sound_spec)
+    sound_spec = {}
+    p 'SOUND SPEC'
+    p raw_sound_spec
+
+    sound_spec[:raw_sound_alert_types] =
+      raw_sound_spec.detect { |hash| hash.has_key?('Alert types') } ?
+      raw_sound_spec.detect { |hash| hash.has_key?('Alert types') }['Alert types'][:text] : nil
+
+    sound_spec[:raw_sound_loudspeaker] =
+      raw_sound_spec.detect { |hash| hash.has_key?('Loudspeaker ') } ?
+      raw_sound_spec.detect { |hash| hash.has_key?('Loudspeaker ') }['Loudspeaker '][:text] : nil
+
+    sound_spec[:raw_sound_35_mm_jack] = 
+      raw_sound_spec.detect { |hash| hash.has_key?('3.5mm jack ') } ?
+      raw_sound_spec.detect { |hash| hash.has_key?('3.5mm jack ') }['3.5mm jack '][:text] : nil
+
+    return sound_spec
+  end
+
 
   def get_display_size_spec(raw_size)
     display_size = {}
@@ -215,9 +268,25 @@ class GsmArenaProductParser < ProductParser
       raw_general_spec.detect { |hash| hash.has_key?('Status') } ? 
       get_status_spec(raw_general_spec.detect { |hash| hash.has_key?('Status') }['Status'][:text]) : nil
 
+    general_spec[:raw_status] =
+      raw_general_spec.detect { |hash| hash.has_key?('Status') } ? 
+      get_raw_status_spec(raw_general_spec.detect { |hash| hash.has_key?('Status') }['Status'][:text]) : nil
+
     general_spec[:sim] =
       raw_general_spec.detect { |hash| hash.has_key?('SIM') } ?
       get_sim_spec(raw_general_spec.detect { |hash| hash.has_key?('SIM') }['SIM'][:text]) : nil
+
+    general_spec[:raw_network_2g] =
+      raw_general_spec.detect { |hash| hash.has_key?('2G Network') } ?
+      raw_general_spec.detect { |hash| hash.has_key?('2G Network') }['2G Network'][:text] : nil
+
+    general_spec[:raw_network_3g] =
+      raw_general_spec.detect { |hash| hash.has_key?('3G Network') } ?
+      raw_general_spec.detect { |hash| hash.has_key?('3G Network') }['3G Network'][:text] : nil
+
+    general_spec[:raw_network_4g] =
+      raw_general_spec.detect { |hash| hash.has_key?('4G Network') } ?
+      raw_general_spec.detect { |hash| hash.has_key?('4G Network') }['4G Network'][:text] : nil
 
     return general_spec
   end
@@ -232,6 +301,10 @@ class GsmArenaProductParser < ProductParser
     status[:available] = get_status_availability(raw_status)
     status[:release_date] = get_release_date(raw_status)
     return status
+  end
+
+  def get_raw_status_spec(raw_status)
+    return raw_status
   end
 
   def get_release_date(raw_status)
@@ -253,13 +326,14 @@ class GsmArenaProductParser < ProductParser
   end
 
   def get_sim_spec(raw_sim)
+    return raw_sim
     raw_sim.downcase!
     sim = {}
 
-    sim[:micro_sim] = raw_sim.include?('micro-sim')
-    sim[:mini_sim] = raw_sim.include?('mini-sim')
-    sim[:dual_sim] = raw_sim.include?('dual-sim') || raw_sim.include?('dual sim')
-    sim[:nano_sim] = raw_sim.include?('nano-sim')
+    #sim[:micro_sim] = raw_sim.include?('micro-sim')
+    #sim[:mini_sim] = raw_sim.include?('mini-sim')
+    #sim[:dual_sim] = raw_sim.include?('dual-sim') || raw_sim.include?('dual sim')
+    #sim[:nano_sim] = raw_sim.include?('nano-sim')
 
     return sim
   end
