@@ -26,6 +26,7 @@ class Admin::CategoryPagesController < ApplicationController
 
  def parse
    @category_page = CategoryPage.find(params[:id])
+
    category_parsing_result = CategoryParsingResult.create(category_page: @category_page, 
                                                           date: DateTime.now) 
    ParseCatWorker.perform_async(category_parsing_result.id, @category_page.id)

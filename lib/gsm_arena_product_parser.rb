@@ -29,8 +29,16 @@ class GsmArenaProductParser < ProductParser
 
     # Find phone name 
     results[:name] = get_phone_name(html)
-    
+    results[:image_url] = get_image_url(html)
+
+    p 'RESULTS WITH IMAGE ARE'
+    p results[:image_url]
     return results
+  end
+
+  def get_image_url(html)
+    image_element = html.css('#specs-cp-pic img')
+    image_element.blank? ? nil : image_element.attribute('src').value 
   end
 
   def get_phone_name(html)
@@ -43,12 +51,15 @@ class GsmArenaProductParser < ProductParser
     specs[:general] = raw_specs.has_key?('General') ? get_general_spec(raw_specs['General']) : nil
     specs[:body] = raw_specs.has_key?('Body') ? get_body_spec(raw_specs['Body']) : nil
     specs[:display] = raw_specs.has_key?('Display') ? get_display_spec(raw_specs['Display']) : nil
+    specs[:camera] = raw_specs.has_key?('Camera') ? get_camera_specs(raw_specs['Camera']) : nil
     specs[:sound] = raw_specs.has_key?('Sound') ? get_sound_specs(raw_specs['Sound']) : nil
+    specs[:data] = raw_specs.has_key?('Data') ? get_data_specs(raw_specs['Data']) : nil
     specs[:features] = raw_specs.has_key?('Features') ? get_features_spec(raw_specs['Features']) : nil
     specs[:memory] = raw_specs.has_key?('Memory') ? get_memory_spec(raw_specs['Memory']) : nil
     specs[:battery] = raw_specs.has_key?('Battery') ? get_battery_spec(raw_specs['Battery']) : nil
     specs[:price] = raw_specs.has_key?('Misc') ? get_price_spec(raw_specs['Misc']) : nil
     specs[:name] = raw_specs[:name]
+    specs[:image_url] = raw_specs[:image_url]
 
     return specs
   end
@@ -81,6 +92,18 @@ class GsmArenaProductParser < ProductParser
   def get_battery_spec(raw_battery_spec)
     battery_spec = {}
 
+    battery_spec[:raw_battery_standby] =
+      raw_battery_spec.detect { |hash| hash.has_key?('Stand-by') } ?
+      raw_battery_spec.detect { |hash| hash.has_key?('Stand-by') }['Stand-by'][:text] : nil
+
+    battery_spec[:raw_battery_talk_time] =
+      raw_battery_spec.detect { |hash| hash.has_key?('Talk time') } ?
+      raw_battery_spec.detect { |hash| hash.has_key?('Talk time') }['Talk time'][:text] : nil
+
+    battery_spec[:raw_battery_music_play] =
+      raw_battery_spec.detect { |hash| hash.has_key?('Music play') } ?
+      raw_battery_spec.detect { |hash| hash.has_key?('Music play') }['Music play'][:text] : nil
+
     battery_spec[:stand_by] = 
       raw_battery_spec.detect { |hash| hash.has_key?('Stand-by') } ?
       get_battery_time(raw_battery_spec.detect { |hash| hash.has_key?('Stand-by') }['Stand-by'][:text]) : nil
@@ -98,11 +121,80 @@ class GsmArenaProductParser < ProductParser
   end
 
   ##############################################################################
+  ##################### CAMERA SPECIFICATIONS #################################
+  ##############################################################################
+
+  def get_camera_specs(raw_camera_spec)
+    camera_spec = {}
+
+    camera_spec[:raw_camera_primary] =
+      raw_camera_spec.detect { |hash| hash.has_key?('Primary') } ?
+      raw_camera_spec.detect { |hash| hash.has_key?('Primary') }['Primary'][:text] : nil
+
+    camera_spec[:raw_camera_features] =
+      raw_camera_spec.detect { |hash| hash.has_key?('Features') } ?
+      raw_camera_spec.detect { |hash| hash.has_key?('Features') }['Features'][:text] : nil
+
+    camera_spec[:raw_camera_video] =
+      raw_camera_spec.detect { |hash| hash.has_key?('Video') } ?
+      raw_camera_spec.detect { |hash| hash.has_key?('Video') }['Video'][:text] : nil
+
+    camera_spec[:raw_camera_secondary] =
+      raw_camera_spec.detect { |hash| hash.has_key?('Secondary') } ?
+      raw_camera_spec.detect { |hash| hash.has_key?('Secondary') }['Secondary'][:text] : nil
+
+    return camera_spec
+  end
+
+
+  ##############################################################################
+  ##################### DATA SPECIFICATIONS #################################
+  ##############################################################################
+  
+  def get_data_specs(raw_data_spec)
+    data_spec = {}
+
+    data_spec[:raw_data_gprs] =
+      raw_data_spec.detect { |hash| hash.has_key?('GPRS') } ?
+      raw_data_spec.detect { |hash| hash.has_key?('GPRS') }['GPRS'][:text] : nil
+
+    data_spec[:raw_data_edge] =
+      raw_data_spec.detect { |hash| hash.has_key?('EDGE') } ?
+      raw_data_spec.detect { |hash| hash.has_key?('EDGE') }['EDGE'][:text] : nil
+
+    data_spec[:raw_data_speed] =
+      raw_data_spec.detect { |hash| hash.has_key?('Speed') } ?
+      raw_data_spec.detect { |hash| hash.has_key?('Speed') }['Speed'][:text] : nil
+
+    data_spec[:raw_data_wlan] =
+      raw_data_spec.detect { |hash| hash.has_key?('WLAN') } ?
+      raw_data_spec.detect { |hash| hash.has_key?('WLAN') }['WLAN'][:text] : nil
+
+    data_spec[:raw_data_bluetooth] =
+      raw_data_spec.detect { |hash| hash.has_key?('Bluetooth') } ?
+      raw_data_spec.detect { |hash| hash.has_key?('Bluetooth') }['Bluetooth'][:text] : nil
+
+    data_spec[:raw_data_usb] =
+      raw_data_spec.detect { |hash| hash.has_key?('USB') } ?
+      raw_data_spec.detect { |hash| hash.has_key?('USB') }['USB'][:text] : nil
+
+    return data_spec
+  end
+
+  ##############################################################################
   ##################### MEMORY SPECIFICATIONS #################################
   ##############################################################################
   
   def get_memory_spec(raw_memory_spec)
     memory_spec = {}
+
+    memory_spec[:raw_memory_internal] =
+      raw_memory_spec.detect { |hash| hash.has_key?('Internal') } ?
+      raw_memory_spec.detect { |hash| hash.has_key?('Internal') }['Internal'][:text] : nil
+
+    memory_spec[:raw_memory_card_slot] =
+      raw_memory_spec.detect { |hash| hash.has_key?('Card slot') } ?
+      raw_memory_spec.detect { |hash| hash.has_key?('Card slot') }['Card slot'][:text] : nil
 
     memory_spec[:internal] = 
       raw_memory_spec.detect { |hash| hash.has_key?('Internal') } ?
@@ -158,6 +250,46 @@ class GsmArenaProductParser < ProductParser
     features_spec[:os] = 
       raw_features_spec.detect { |hash| hash.has_key?('OS') } ?
       get_features_os_spec(raw_features_spec.detect { |hash| hash.has_key?('OS') }['OS'][:text]) : nil
+
+    features_spec[:raw_features_chipset] = 
+      raw_features_spec.detect { |hash| hash.has_key?('Chipset') } ?
+      raw_features_spec.detect { |hash| hash.has_key?('Chipset') }['Chipset'][:text] : nil
+
+    features_spec[:raw_features_cpu] = 
+      raw_features_spec.detect { |hash| hash.has_key?('CPU') } ?
+      raw_features_spec.detect { |hash| hash.has_key?('CPU') }['CPU'][:text] : nil
+
+    features_spec[:raw_features_gpu] = 
+      raw_features_spec.detect { |hash| hash.has_key?('GPU') } ?
+      raw_features_spec.detect { |hash| hash.has_key?('GPU') }['GPU'][:text] : nil
+
+    features_spec[:raw_features_sensors] = 
+      raw_features_spec.detect { |hash| hash.has_key?('Sensors') } ?
+      raw_features_spec.detect { |hash| hash.has_key?('Sensors') }['Sensors'][:text] : nil
+
+    features_spec[:raw_features_messaging] = 
+      raw_features_spec.detect { |hash| hash.has_key?('Messaging') } ?
+      raw_features_spec.detect { |hash| hash.has_key?('Messaging') }['Messaging'][:text] : nil
+
+    features_spec[:raw_features_browser] = 
+      raw_features_spec.detect { |hash| hash.has_key?('Browser') } ?
+      raw_features_spec.detect { |hash| hash.has_key?('Browser') }['Browser'][:text] : nil
+
+    features_spec[:raw_features_radio] = 
+      raw_features_spec.detect { |hash| hash.has_key?('Radio') } ?
+      raw_features_spec.detect { |hash| hash.has_key?('Radio') }['Radio'][:text] : nil
+
+    features_spec[:raw_features_gps] = 
+      raw_features_spec.detect { |hash| hash.has_key?('GPS') } ?
+      raw_features_spec.detect { |hash| hash.has_key?('GPS') }['GPS'][:text] : nil
+
+    features_spec[:raw_features_java] = 
+      raw_features_spec.detect { |hash| hash.has_key?('Java') } ?
+      raw_features_spec.detect { |hash| hash.has_key?('Java') }['Java'][:text] : nil
+
+    features_spec[:raw_features_colors] = 
+      raw_features_spec.detect { |hash| hash.has_key?('Colors') } ?
+      raw_features_spec.detect { |hash| hash.has_key?('Colors') }['Colors'][:text] : nil
 
     return features_spec
   end

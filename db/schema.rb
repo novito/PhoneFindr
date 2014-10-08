@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140515051744) do
+ActiveRecord::Schema.define(version: 20140516235744) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -83,6 +83,36 @@ ActiveRecord::Schema.define(version: 20140515051744) do
     t.string   "raw_sound_alert_types"
     t.string   "raw_sound_loudspeaker"
     t.string   "raw_sound_35_mm_jack"
+    t.string   "raw_memory_internal"
+    t.string   "raw_memory_card_slot"
+    t.string   "raw_data_gprs"
+    t.string   "raw_data_edge"
+    t.string   "raw_data_speed"
+    t.string   "raw_data_wlan"
+    t.string   "raw_data_bluetooth"
+    t.string   "raw_data_usb"
+    t.string   "raw_camera_primary"
+    t.string   "raw_camera_features"
+    t.string   "raw_camera_video"
+    t.string   "raw_camera_secondary"
+    t.string   "raw_features_chipset"
+    t.string   "raw_features_cpu"
+    t.string   "raw_features_gpu"
+    t.string   "raw_features_sensors"
+    t.string   "raw_features_messaging"
+    t.string   "raw_features_browser"
+    t.string   "raw_features_radio"
+    t.string   "raw_features_gps"
+    t.string   "raw_features_java"
+    t.string   "raw_features_colors"
+    t.string   "raw_battery_standby"
+    t.string   "raw_battery_talk_time"
+    t.string   "raw_battery_music_play"
+    t.text     "image_url"
+    t.string   "raw_price"
+  end
+
+  create_table "image_urls", force: true do |t|
   end
 
   create_table "sources", force: true do |t|

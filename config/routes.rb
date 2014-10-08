@@ -14,6 +14,7 @@ PhoneFindr::Application.routes.draw do
         post :parse
       end
     end
+    resources :devices, only: [:index]
     resources :category_parsing_results, except: [:index, :create, :new]
   end
 
